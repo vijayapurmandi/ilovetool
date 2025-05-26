@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Tools - All-in-One PDF Utility</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #007bff;
+      --background-color: #f4f7fa;
+      --text-color: #333;
+      --card-bg: #fff;
+      --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      --dark-bg: #1a1a1a;
+      --dark-card-bg: #2c2c2c;
+      --dark-text: #e0e0e0;
+    }
+
+    [data-theme="dark"] {
+      --background-color: var(--dark-bg);
+      --text-color: var(--dark-text);
+      --card-bg: var(--dark-card-bg);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--background-color);
+      color: var(--text-color);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: var(--card-bg);
+      box-shadow: var(--card-shadow);
+    }
+
+    .navbar .logo {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    .nav-links a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: var(--text-color);
+      font-size: 1rem;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary-color);
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .search-container {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .search-bar {
+      width: 100%;
+      max-width: 500px;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    .tools-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      padding: 2rem;
+      justify-content: center;
+    }
+
+    .tool-card {
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      width: 100%;
+      max-width: 250px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .tool-card img {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 1rem;
+    }
+
+    .tool-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .tool-card p {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: var(--card-bg);
+      margin-top: 2rem;
+    }
+
+    .footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+      margin: 0 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .nav-links a {
+        margin: 0 0.5rem;
+      }
+
+      .tool-card {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">PDF Tools</div>
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#tools">Tools</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <button class="theme-toggle" onclick="toggleTheme()">Toggle Dark Mode</button>
+    </div>
+  </nav>
+
+  <div class="search-container">
+    <input type="text" class="search-bar" placeholder="Search for a tool..." oninput="filterTools()">
+  </div>
+
+  <div class="tools-grid" id="tools-grid">
+    <!-- Tool Cards -->
+    <div class="tool-card" data-tool="merge">
+      <img src="https://via.placeholder.com/40" alt="Merge PDF Icon">
+      <h3>Merge PDF</h3>
+      <p>Combine multiple PDFs into one file.</p>
+    </div>
+    <div class="tool-card" data-tool="split">
+      <img src="https://via.placeholder.com/40" alt="Split PDF Icon">
+      <h3>Split PDF</h3>
+      <p>Split a PDF into multiple files.</p>
+    </div>
+    <div class="tool-card" data-tool="compress">
+      <img src="https://via.placeholder.com/40" alt="Compress PDF Icon">
+      <h3>Compress PDF</h3>
+      <p>Reduce the size of your PDF files.</p>
+    </div>
+    <div class="tool-card" data-tool="pdf-to-word">
+      <img src="https://via.placeholder.com/40" alt="PDF to Word Icon">
+      <h3>PDF to Word</h3>
+      <p>Convert PDF files to Word documents.</p>
+    </div>
+    <div class="tool-card" data-tool="word-to-pdf">
+      <img src="https://via.placeholder.com/40" alt="Word to PDF Icon">
+      <h3>Word to PDF</h3>
+      <p>Convert Word documents to PDF.</p>
+    </div>
+    <div class="tool-card" data-tool="pdf-to-powerpoint">
+      <img src="https://via.placeholder.com/40" alt="PDF to PowerPoint Icon">
+      <h3>PDF to PowerPoint</h3>
+      <p>Convert PDFs to PowerPoint slides.</p>
+    </div>
+    <div class="tool-card" data-tool="powerpoint-to-pdf">
+      <img src="https://via.placeholder.com/40" alt="PowerPoint to PDF Icon">
+      <h3>PowerPoint to PDF</h3>
+      <p>Convert PowerPoint slides to PDF.</p>
+    </div>
+    <div class="tool-card" data-tool="pdf-to-excel">
+      <img src="https://via.placeholder.com/40" alt="PDF to Excel Icon">
+      <h3>PDF to Excel</h3>
+      <p>Convert PDFs to Excel spreadsheets.</p>
+    </div>
+    <div class="tool-card" data-tool="excel-to-pdf">
+      <img src="https://via.placeholder.com/40" alt="Excel to PDF Icon">
+      <h3>Excel to PDF</h3>
+      <p>Convert Excel spreadsheets to PDF.</p>
+    </div>
+    <div class="tool-card" data-tool="pdf-to-jpg">
+      <img src="https://via.placeholder.com/40" alt="PDF to JPG Icon">
+      <h3>PDF to JPG</h3>
+      <p>Convert PDF pages to JPG images.</p>
+    </div>
+    <div class="tool-card" data-tool="jpg-to-pdf">
+      <img src="https://via.placeholder.com/40" alt="JPG to PDF Icon">
+      <h3>JPG to PDF</h3>
+      <p>Convert JPG images to PDF files.</p>
+    </div>
+    <div class="tool-card" data-tool="edit">
+      <img src="https://via.placeholder.com/40" alt="Edit PDF Icon">
+      <h3>Edit PDF</h3>
+      <p>Edit text and images in PDF files.</p>
+    </div>
+    <div class="tool-card" data-tool="sign">
+      <img src="https://via.placeholder.com/40" alt="Sign PDF Icon">
+      <h3>Sign PDF</h3>
+      <p>Add digital signatures to PDFs.</p>
+    </div>
+    <div class="tool-card" data-tool="watermark">
+      <img src="https://via.placeholder.com/40" alt="Watermark PDF Icon">
+      <h3>Watermark PDF</h3>
+      <p>Add watermarks to your PDFs.</p>
+    </div>
+    <div class="tool-card" data-tool="rotate">
+      <img src="https://via.placeholder.com/40" alt="Rotate PDF Icon">
+      <h3>Rotate PDF</h3>
+      <p>Rotate pages in your PDF files.</p>
+    </div>
+    <div class="tool-card" data-tool="html-to-pdf">
+      <img src="https://via.placeholder.com/40" alt="HTML to PDF Icon">
+      <h3>HTML to PDF</h3>
+      <p>Convert HTML pages to PDF.</p>
+    </div>
+    <div class="tool-card" data-tool="unlock">
+      <img src="https://via.placeholder.com/40" alt="Unlock PDF Icon">
+      <h3>Unlock PDF</h3>
+      <p>Remove password protection from PDFs.</p>
+    </div>
+    <div class="tool-card" data-tool="protect">
+      <img src="https://via.placeholder.com/40" alt="Protect PDF Icon">
+      <h3>Protect PDF</h3>
+      <p>Add password protection to PDFs.</p>
+    </div>
+    <div class="tool-card" data-tool="organize">
+      <img src="https://via.placeholder.com/40" alt="Organize PDF Icon">
+      <h3>Organize PDF</h3>
+      <p>Rearrange or delete PDF pages.</p>
+    </div>
+    <div class="tool-card" data-tool="pdf-a">
+      <img src="https://via.placeholder.com/40" alt="PDF to PDF/A Icon">
+      <h3>PDF to PDF/A</h3>
+      <p>Convert PDFs to PDF/A format.</p>
+    </div>
+    <div class="tool-card" data-tool="repair">
+      <img src="https://via.placeholder.com/40" alt="Repair PDF Icon">
+      <h3>Repair PDF</h3>
+      <p>Fix corrupted PDF files.</p>
+    </div>
+    <div class="tool-card" data-tool="page-numbers">
+      <img src="https://via.placeholder.com/40" alt="Page Numbers Icon">
+      <h3>Page Numbers</h3>
+      <p>Add page numbers to PDFs.</p>
+    </div>
+    <div class="tool-card" data-tool="scan-to-pdf">
+      <img src="https://via.placeholder.com/40" alt="Scan to PDF Icon">
+      <h3>Scan to PDF</h3>
+      <p>Convert scanned documents to PDF.</p>
+    </div>
+    <div class="tool-card" data-tool="ocr">
+      <img src="https://via.placeholder.com/40" alt="OCR PDF Icon">
+      <h3>OCR PDF</h3>
+      <p>Make scanned PDFs searchable.</p>
+    </div>
+    <div class="tool-card" data-tool="compare">
+      <img src="https://via.placeholder.com/40" alt="Compare PDF Icon">
+      <h3>Compare PDF</h3>
+      <p>Compare two PDF files for differences.</p>
+    </div>
+    <div class="tool-card" data-tool="redact">
+      <img src="https://via.placeholder.com/40" alt="Redact PDF Icon">
+      <h3>Redact PDF</h3>
+      <p>Remove sensitive information from PDFs.</p>
+    </div>
+    <div class="tool-card" data-tool="crop">
+      <img src="https://via.placeholder.com/40" alt="Crop PDF Icon">
+      <h3>Crop PDF</h3>
+      <p>Crop pages in your PDF files.</p>
+    </div>
+    <div class="tool-card" data-tool="pdf-to-epub">
+      <img src="https://via.placeholder.com/40" alt="PDF to ePub Icon">
+      <h3>PDF to ePub</h3>
+      <p>Convert PDFs to ePub format.</p>
+    </div>
+    <div class="tool-card" data-tool="image-compress">
+      <img src="https://via.placeholder.com/40" alt="Image Compressor Icon">
+      <h3>Image Compressor</h3>
+      <p>Compress images for smaller file sizes.</p>
+    </div>
+    <div class="tool-card" data-tool="pdf-to-text">
+      <img src="https://via.placeholder.com/40" alt="PDF to Text Icon">
+      <h3>PDF to Text</h3>
+      <p>Extract text from PDF files.</p>
+    </div>
+    <div class="tool-card" data-tool="qr-code">
+      <img src="https://via.placeholder.com/40" alt="Add QR Code Icon">
+      <h3>Add QR Code to PDF</h3>
+      <p>Add QR codes to your PDFs.</p>
+    </div>
+    <div class="tool-card" data-tool="translate">
+      <img src="https://via.placeholder.com/40" alt="PDF Translator Icon">
+      <h3>PDF Translator</h3>
+      <p>Translate text in PDF files.</p>
+    </div>
+    <div class="tool-card" data-tool="annotate">
+      <img src="https://via.placeholder.com/40" alt="Annotate PDF Icon">
+      <h3>Annotate PDF</h3>
+      <p>Add annotations to PDFs.</p>
+    </div>
+    <div class="tool-card" data-tool="form-filler">
+      <img src="https://via.placeholder.com/40" alt="PDF Form Filler Icon">
+      <h3>PDF Form Filler</h3>
+      <p>Fill out PDF forms easily.</p>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>
+      <a href="#privacy">Privacy Policy</a> |
+      <a href="#terms">Terms of Service</a> |
+      <a href="#contact">Contact Us</a>
+    </p>
+    <p>&copy; 2025 PDF Tools. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      document.body.dataset.theme = document.body.dataset.theme === 'dark' ? '' : 'dark';
+    }
+
+    function filterTools() {
+      const searchInput = document.querySelector('.search-bar').value.toLowerCase();
+      const toolCards = document.querySelectorAll('.tool-card');
+
+      toolCards.forEach(card => {
+        const toolName = card.dataset.tool.toLowerCase();
+        const toolTitle = card.querySelector('h3').textContent.toLowerCase();
+        if (toolName.includes(searchInput) || toolTitle.includes(searchInput)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    document.querySelectorAll('.tool-card').forEach(card => {
+      card.addEventListener('click', () => {
+        alert(`Opening ${card.querySelector('h3').textContent} tool...`);
+        // Placeholder for tool page/modal navigation
+      });
+    });
+  </script>
+</body>
+</html>
